@@ -1,3 +1,5 @@
+require 'pry'
+
 module Slappy
   module SlackAPI
     module Findable
@@ -57,6 +59,8 @@ module Slappy
 
         def find_by_keyword(hash)
           hash.map { |key, value| list.find { |obj| obj.send(key) == value } }.first
+        rescue => e
+          binding.pry
         end
 
         private
@@ -72,7 +76,12 @@ module Slappy
             fail exception, exception.message
           end
 
-          result[list_name].map { |data| new(data) }
+          hoge = if api_name == 'conversations'
+                   'channels'
+                 else
+                   'groups'
+                 end
+          result[hoge].map { |data| new(data) }
         end
       end
     end

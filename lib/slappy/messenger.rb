@@ -2,7 +2,7 @@ module Slappy
   class Messenger
     class MissingChannelException < StandardError; end
 
-    CHANNEL_APIS = [SlackAPI::Channel, SlackAPI::Group, SlackAPI::Direct]
+    CHANNEL_APIS = [SlackAPI::Conversation, SlackAPI::Direct]
 
     def initialize(options = {})
       opt = options.dup
@@ -23,10 +23,10 @@ module Slappy
           instance = klass.find(name: @destination) || klass.find(id: @destination)
           break unless instance.nil?
         end
+        binding.pry if instance.nil?
         fail MissingChannelException.new, "channel / #{@destination} is not found" if instance.nil?
         id = instance.id
       end
-
       options[:channel] = id
       response = Slack.chat_postMessage options
       fail SlackAPI::SlackError.new, response['error'] unless response['ok']

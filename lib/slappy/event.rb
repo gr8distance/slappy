@@ -16,8 +16,7 @@ module Slappy
     end
 
     def channel
-      SlackAPI::Channel.find(id: @data['channel']) ||
-        SlackAPI::Group.find(id: @data['channel']) ||
+      SlackAPI::Conversation.find(id: @data['channel']) ||
         SlackAPI::Direct.find(id: @data['channel'])
     end
 

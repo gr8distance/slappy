@@ -5,7 +5,7 @@ describe Slappy::Messenger do
   let(:response)  { { 'ok' => true } }
   let(:messenger) { described_class.new options }
   let(:options)   { { channel: channel } }
-  let(:channel) { Slappy::SlackAPI::Channel.new data }
+  let(:channel) { Slappy::SlackAPI::Conversation.new data }
   let(:data)    { { id: id, name: 'test', text: 'text' } }
   let(:id)        { '12345' }
 
@@ -14,6 +14,7 @@ describe Slappy::Messenger do
     let(:group_class)   { Slappy::SlackAPI::Group }
     let(:channel_class) { Slappy::SlackAPI::Channel }
     let(:direct_class)  { Slappy::SlackAPI::Direct }
+    let(:conversation_class)  { Slappy::SlackAPI::Conversation }
 
     context 'when SlackAPI::Channel given' do
       it { expect { subject }.not_to raise_error }
@@ -24,12 +25,15 @@ describe Slappy::Messenger do
         allow(group_class).to receive(:list).and_return([result])
         allow(channel_class).to receive(:list).and_return([])
         allow(direct_class).to receive(:list).and_return([])
+        allow(conversation_class).to receive(:list).and_return([])
       end
 
-      let(:result)  { group_class.new id: id }
+      let(:result)  { conversation_class.new id: id }
       let(:channel) { id }
 
-      it { expect { subject }.not_to raise_error }
+      it {
+        expect { subject }.not_to raise_error
+      }
     end
 
     context 'when response expect error' do

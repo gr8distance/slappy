@@ -2,8 +2,9 @@ require 'spec_helper'
 
 describe Slappy::Client do
   let(:client) { Slappy::Client.new }
-  let(:realtime) { ::Slack::RealTime::Client.new(url) }
   let(:url)      { nil }
+  let(:rtm_start_response) { { url: url } }
+  let(:realtime) { ::Slack::RealTime::Client.new(rtm_start_response) }
 
   before do
     # There classes in slack-api (Stop connection for slack)
